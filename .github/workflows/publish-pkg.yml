@@ -1,28 +1,30 @@
-name: Publish okg
+name: Publish pkg
 
 on:
+  push:
   workflow_dispatch:
 
 defaults:
   run:
     shell: bash
-    working-directory: sample-packages/npm
+    working-directory: sample-packages/docker
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+
+    env:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-          registry-url: https://npm.pkg.github.com/
-
       - run: |
-          npm install
-          npm ci
+          echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+
+          docker build -t ghcr.io/hkklv/test:latest
+
+          docker push ghcr.io/hkklv/test:latest
       
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      
+        
