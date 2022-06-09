@@ -22,7 +22,7 @@ jobs:
       - run: |
           echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
 
-          docker build -t ghcr.io/hkklv/test:latest
+          docker build -t ghcr.io/hkklv/test:latest .
 
           docker push ghcr.io/hkklv/test:latest
       
